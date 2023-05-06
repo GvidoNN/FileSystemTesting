@@ -3,16 +3,16 @@ package my.lovely.filesystemtesting.data
 import android.os.Environment
 import android.util.Log
 import my.lovely.filesystemtesting.domain.model.FileModel
+import my.lovely.filesystemtesting.domain.repository.FilesRepository
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
-class FilesRepositoryImpl {
+class FilesRepositoryImpl: FilesRepository {
 
     private var filesList = arrayListOf<FileModel>()
 
-    fun getMainFiles(): List<FileModel>{
+    override suspend fun getMainFiles(): List<FileModel>{
         val directory = File(Environment.getExternalStorageDirectory().toString())
         val files = directory.listFiles()
         for (file in files) {
