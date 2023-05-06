@@ -47,25 +47,24 @@ class MainFragment: Fragment(R.layout.fragment_main) {
         adapter = FilesAdapter()
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        checkPermissionsAndShow()
+
+        adapter.setOnDirectoryClickListener(object: FilesAdapter.OnItemClickListener{
+            override fun onItemClick(position: Int) {
+                Log.d("MyLog","Нажали на ${adapter.filesList[position].name}")
+                Log.d("MyLog","Путь к файлу ${adapter.filesList[position].path}")
+                mainViewModel.getMainFiles(adapter.filesList[position].path)
+            }
+        })
+
+
+    }
+
+    private fun checkPermissionsAndShow(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (Environment.isExternalStorageManager()) {
                 Log.d("MyLog", "Есть разрешение")
-                /*val directory = File(Environment.getExternalStorageDirectory().toString())
-                val files = directory.listFiles()
-                for (file in files) {
-                    if (file.isDirectory) {
-                        Log.d("MyLog", "Directory: ${file.name}")
-                        val directory = file.listFiles()
-                        for (txt in directory) {
-                            if (txt.isFile) {
-                                Log.d("MyLog", "file: ${txt.name}")
-                            }
-                        }
-                    } else {
-                        Log.d("MyLog", "File: ${file.name}")
-                    }
-                }*/
-                mainViewModel.getMainFiles()
+                mainViewModel.getMainFiles(path = "/storage/emulated/0/")
                 mainViewModel.files.observe(viewLifecycleOwner){
                     adapter.setFileList(it)
                 }
@@ -81,40 +80,11 @@ class MainFragment: Fragment(R.layout.fragment_main) {
                 ActivityCompat.requestPermissions(requireActivity(),
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
             }
-            /*val directory = File(Environment.getExternalStorageDirectory().toString())
-            val files = directory.listFiles()
-            for (file in files) {
-                if (file.isDirectory) {
-                    Log.d("MyLog", "Directory: ${file.name}")
-                    val directory = file.listFiles()
-                    for (txt in directory) {
-                        if (txt.isFile) {
-                            Log.d("MyLog", "File: ${txt.name}")
-                            Log.d("MyLog", "Last modified: ${
-                                SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(
-                                    Date(txt.lastModified())
-                                )}")
-                            Log.d("MyLog", "Size: ${txt.length()} bytes")
-                            Log.d("MyLog", "Readable: ${txt.canRead()}")
-                            Log.d("MyLog", "Writable: ${txt.canWrite()}")
-                        }
-                    }
-                } else {
-                    Log.d("MyLog", "File: ${file.name}")
-                }
-            }*/
-            mainViewModel.getMainFiles()
+            mainViewModel.getMainFiles("/storage/emulated/0/")
             mainViewModel.files.observe(viewLifecycleOwner){
                 adapter.setFileList(it)
             }
         }
-
-
-
-        var fileList = arrayListOf<FileModel>(
-            FileModel("ligma.txt",123123,"12.02.2023","144kb"),
-            FileModel("ligma.txt",123123,"12.02.2023","144kb")
-        )
     }
 
 

@@ -18,7 +18,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
 //    private var progressBarLiveData = MutableLiveData<Boolean>()
-    private val filesLiveData = MutableLiveData<List<FileModel>>()
+    private var filesLiveData = MutableLiveData<List<FileModel>>()
 
     val files: LiveData<List<FileModel>>
         get() = filesLiveData
@@ -26,9 +26,9 @@ class MainViewModel @Inject constructor(
 //    val progressBar: LiveData<Boolean>
 //        get() = progressBarLiveData
 
-    fun getMainFiles() = viewModelScope.launch(Dispatchers.IO) {
+    fun getMainFiles(path: String) = viewModelScope.launch(Dispatchers.IO) {
 //        progressBarLiveData.postValue(true)
-        var result = getFilesUseCase.getMainFiles()
+        var result = getFilesUseCase.getMainFiles(path = path)
         filesLiveData.postValue(result)
 //        progressBarLiveData.postValue(false)
     }

@@ -4,5 +4,5 @@ import my.lovely.filesystemtesting.domain.model.FileModel
 
 interface FilesRepository {
 
-    suspend fun getMainFiles(): List<FileModel>
+    suspend fun getMainFiles(path: String): List<FileModel>
 }

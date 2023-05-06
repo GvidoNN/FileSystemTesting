@@ -6,8 +6,8 @@ import javax.inject.Inject
 
 class GetFilesUseCase @Inject constructor(private val filesRepository: FilesRepository) {
 
-    suspend fun getMainFiles(): List<FileModel> {
-        val result = filesRepository.getMainFiles()
+    suspend fun getMainFiles(path: String): List<FileModel> {
+        val result = filesRepository.getMainFiles(path = path)
         return result
     }
 }
