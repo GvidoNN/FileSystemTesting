@@ -1,6 +1,5 @@
-package my.lovely.filesystemtesting.presentation
+package my.lovely.filesystemtesting.presentation.main
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,6 +18,8 @@ class MainViewModel @Inject constructor(
 
 //    private var progressBarLiveData = MutableLiveData<Boolean>()
     private var filesLiveData = MutableLiveData<List<FileModel>>()
+
+    var filesBackLiveData = MutableLiveData<List<FileModel>>()
 
     val files: LiveData<List<FileModel>>
         get() = filesLiveData

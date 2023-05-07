@@ -11,15 +11,17 @@ import java.util.*
 
 class FilesRepositoryImpl: FilesRepository {
 
-    private var filesList = arrayListOf<FileModel>()
+
 
     override suspend fun getMainFiles(path: String): List<FileModel>{
         //Environment.getExternalStorageDirectory().toString()
+        var filesList = arrayListOf<FileModel>()
         val directory = File(path)
         val files = directory.listFiles()
+        Log.d("MyLog","В репозитории и тут путь ${path}")
         for (file in files) {
             if (file.isDirectory) {
-                Log.d("MyLog", "Directory: ${file.name}")
+//                Log.d("MyLog", "Directory: ${file.name}")
                 var name = file.name
                 var date = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(file.lastModified())).toString()
                 var size = ""
@@ -29,7 +31,8 @@ class FilesRepositoryImpl: FilesRepository {
                     changeDate = date,
                     size = size,
                     image = R.drawable.directory,
-                    path = path))
+                    path = path,
+                    type = "directory"))
                 /*Log.d("MyLog", "Directory: ${file.name}")
                 Log.d("MyLog", "Last modified: ${
                     SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(file.lastModified()))}")
@@ -40,7 +43,7 @@ class FilesRepositoryImpl: FilesRepository {
 
 
             } else {
-                Log.d("MyLog", "File: ${file.name}")
+//                Log.d("MyLog", "File: ${file.name}")
                 var name = file.name
                 var date = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(file.lastModified())).toString()
                 var size = "${file.length()} bytes"
@@ -50,7 +53,8 @@ class FilesRepositoryImpl: FilesRepository {
                     changeDate = date,
                     size = size,
                     image = R.drawable.txt,
-                    path = path))
+                    path = path,
+                    type = "txt"))
 //                Log.d("MyLog", "File: ${file.name}")
 //                Log.d("MyLog", "Last modified: ${
 //                    SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(file.lastModified()))}")
@@ -64,40 +68,3 @@ class FilesRepositoryImpl: FilesRepository {
         return filesList
     }
 }
-
-//if (txt.isFile) {
-//    var name = txt.name
-//    var date = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(txt.lastModified())).toString()
-//    var size = "${txt.length()} bytes"
-//    filesList.add(FileModel(
-//        name = name,
-//        changeDate = date,
-//        size = size,
-//        image = 123123
-//    ))
-//
-//    Log.d("MyLog", "File: ${txt.name}")
-//    Log.d("MyLog", "Last modified: ${
-//        SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(txt.lastModified()))}")
-//    Log.d("MyLog", "Size: ${txt.length()} bytes")
-//    Log.d("MyLog", "Readable: ${txt.canRead()}")
-//    Log.d("MyLog", "Writable: ${txt.canWrite()}")
-//}
-
-/*val directory = file.listFiles()
-for (txt in directory) {
-    var name = txt.name
-    var date = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(txt.lastModified())).toString()
-    var size = "${txt.length()} bytes"
-    filesList.add(FileModel(
-        name = name,
-        changeDate = date,
-        size = size,
-        image = 123123))
-    Log.d("MyLog", "File: ${txt.name}")
-    Log.d("MyLog", "Last modified: ${
-        SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(txt.lastModified()))}")
-    Log.d("MyLog", "Size: ${txt.length()} bytes")
-    Log.d("MyLog", "Readable: ${txt.canRead()}")
-    Log.d("MyLog", "Writable: ${txt.canWrite()}")
-}*/

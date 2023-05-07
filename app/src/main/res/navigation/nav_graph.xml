@@ -6,6 +6,18 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="my.lovely.filesystemtesting.presentation.MainFragment"
-        android:label="MainFragment" />
+        android:name="my.lovely.filesystemtesting.presentation.main.MainFragment"
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_secondFragment"
+            app:destination="@id/secondFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/secondFragment"
+        android:name="my.lovely.filesystemtesting.presentation.second.SecondFragment"
+        android:label="SecondFragment" >
+        <action
+            android:id="@+id/action_secondFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
 </navigation>
