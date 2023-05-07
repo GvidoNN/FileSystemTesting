@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import my.lovely.filesystemtesting.R
 import my.lovely.filesystemtesting.domain.model.FileModel
@@ -50,49 +51,19 @@ class FilesAdapter() : RecyclerView.Adapter<FilesAdapter.FilesViewHolder>() {
 
     override fun onBindViewHolder(holder: FilesViewHolder, position: Int) {
         val fileData = filesList[position]
-        holder.tvFileName.text = fileData.name
-        holder.tvFileSize.text = fileData.size
-        holder.tvFileDate.text = fileData.changeDate
-        holder.imFile.setImageResource(fileData.image)
-//        try {
-//            val url = "https:" + bookData.edition.coverUrl
-//            Glide.with(holder.itemView).load(url).into(holder.imCoverBook)
-//        } catch (e: Exception) {
-//            holder.imCoverBook.setImageResource(R.drawable.nocover)
-//        }
-//        try {
-//            holder.tvTextName.text = bookData.edition.title
-//        } catch (e: Exception) {
-//            holder.tvTextName.text = context.getString(R.string.nan_title)
-//        }
-//        try {
-//            holder.tvAuthorName.text = bookData.edition.authors[0].name
-//        } catch (e: java.lang.Exception) {
-//            holder.tvAuthorName.text = context.getString(R.string.nan_author)
-//        }
-//        var textSub = bookData.highlight.text[0]
-//        holder.tvSubject.text = editSubjectText(textSub)
-//        val isExpandable: Boolean = bookData.isExpandable
-//        holder.tvSubject.isVisible = isExpandable
-//        holder.imAddToFavourite.isVisible = !isExpandable
-//
-//        holder.constraintLayout.setOnClickListener {
-//            isAnyItemExpanded(position)
-//            bookData.isExpandable = !bookData.isExpandable
-//            notifyItemChanged(position)
-//        }
-    }
+        if(fileData.name.length > 20){
+            holder.tvFileName.text = fileData.name.substring(0,19) + "..."
+        } else holder.tvFileName.text = fileData.name
 
-//    private fun isAnyItemExpanded(position: Int) {
-//        val temp = searchInsideList.indexOfFirst {
-//            it.isExpandable
-//        }
-//        if (temp >= 0 && temp != position) {
-//            searchInsideList[temp].isExpandable = false
-//            notifyItemChanged(temp, 0)
-//        }
-//
-//    }
+        if(fileData.type == "directory"){
+            holder.tvFileSize.isVisible = false
+        }else {
+            holder.tvFileSize.text = "${fileData.size} bytes"
+        }
+        holder.tvFileDate.text = fileData.changeDate
+        holder.imFile.setImageResource(fileData.image
+        )}
+
 
     interface OnItemClickListener{
         fun onItemClick(position: Int)

@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">FileSystemTesting</string>
+    <string name="app_name" translatable="false">FileSystemTesting</string>
+    <string name="warning">If you see this, then you have Android 11 and above, and you need to allow access to all files (in settings or in a pop-up window).
+     If you have already done this, then restart the application and you will see this masterpiece</string>
 </resources>

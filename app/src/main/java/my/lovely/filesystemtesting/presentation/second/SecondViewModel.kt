@@ -25,8 +25,8 @@ class SecondViewModel @Inject constructor(
     val filesSecond: LiveData<List<FileModel>>
         get() = filesSecondLiveData
 
-    fun getSecondFiles(path: String) = viewModelScope.launch(Dispatchers.IO) {
-        var result = getFilesUseCase.getMainFiles(path = path)
+    fun getSecondFiles(path: String, typeSorted: Int) = viewModelScope.launch(Dispatchers.IO) {
+        var result = getFilesUseCase.getMainFiles(path = path, typeSorted = typeSorted)
         filesSecondLiveData.postValue(result)
     }
 

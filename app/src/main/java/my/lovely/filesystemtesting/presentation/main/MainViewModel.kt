@@ -25,8 +25,8 @@ class MainViewModel @Inject constructor(
     val files: LiveData<List<FileModel>>
         get() = filesLiveData
 
-    fun getMainFiles(path: String) = viewModelScope.launch(Dispatchers.IO) {
-        var result = getFilesUseCase.getMainFiles(path = path)
+    fun getMainFiles(path: String, sorted: Int) = viewModelScope.launch(Dispatchers.IO) {
+        var result = getFilesUseCase.getMainFiles(path = path, typeSorted = sorted)
         filesLiveData.postValue(result)
     }
 

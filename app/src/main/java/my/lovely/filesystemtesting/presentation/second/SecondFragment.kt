@@ -9,10 +9,10 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.webkit.MimeTypeMap
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -33,6 +33,12 @@ class SecondFragment: Fragment(R.layout.fragment_second) {
     private lateinit var adapter: FilesAdapter
     private val secondViewModel: SecondViewModel by viewModels()
     private lateinit var bundle: Bundle
+    private var count = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +52,7 @@ class SecondFragment: Fragment(R.layout.fragment_second) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("MyLog","Второй фрагмент")
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
         adapter = FilesAdapter()
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -54,12 +61,9 @@ class SecondFragment: Fragment(R.layout.fragment_second) {
 
         adapter.setOnDirectoryClickListener(object: FilesAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                Log.d("MyLog","Нажали на ${adapter.filesList[position].name}")
-                Log.d("MyLog","Путь к файлу ${adapter.filesList[position].path}")
                 if(adapter.filesList[position].type == "directory"){
                     bundle = Bundle()
                     bundle.putString("path", adapter.filesList[position].path)
-                    Log.d("MyLog","Передали ${adapter.filesList[position].path}")
                     findNavController().navigate(R.id.action_secondFragment_to_mainFragment, bundle)
                 } else{
                     startActivity(secondViewModel.openFile(path = adapter.filesList[position].path, context = requireContext(), type = adapter.filesList[position].type))
@@ -67,14 +71,36 @@ class SecondFragment: Fragment(R.layout.fragment_second) {
 
             }
         })
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_toolbar, menu)
+        return super.onCreateOptionsMenu(menu, inflater)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val path = arguments?.getString("path") ?: "/storage/emulated/0/"
+        return when (item.itemId) {
+            R.id.action_sort -> {
+                if(count == 4){
+                    count = 0
+                }
+                count += 1
+                Toast.makeText(requireContext(),"Sort! ${count}",Toast.LENGTH_SHORT).show()
+                secondViewModel.getSecondFiles(path = path, typeSorted = count)
+                secondViewModel.filesSecond.observe(viewLifecycleOwner){
+                    adapter.setFileList(it)
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun checkPermissionsAndShow(path: String){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (Environment.isExternalStorageManager()) {
-                secondViewModel.getSecondFiles(path = path)
+                secondViewModel.getSecondFiles(path = path, typeSorted = 1)
                 secondViewModel.filesSecond.observe(viewLifecycleOwner){
                     adapter.setFileList(it)
                 }
@@ -88,7 +114,7 @@ class SecondFragment: Fragment(R.layout.fragment_second) {
                 ActivityCompat.requestPermissions(requireActivity(),
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
             }
-            secondViewModel.getSecondFiles(path = path)
+            secondViewModel.getSecondFiles(path = path, typeSorted = 1)
             secondViewModel.filesSecond.observe(viewLifecycleOwner){
                 adapter.setFileList(it)
             }

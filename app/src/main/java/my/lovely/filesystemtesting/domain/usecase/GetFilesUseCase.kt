@@ -8,9 +8,27 @@ import javax.inject.Inject
 
 class GetFilesUseCase @Inject constructor(private val filesRepository: FilesRepository) {
 
-    suspend fun getMainFiles(path: String): List<FileModel> {
-        val result = filesRepository.getMainFiles(path = path).sortedBy { it.name }
-        for(i in result){
+    suspend fun getMainFiles(path: String, typeSorted: Int): List<FileModel> {
+        var startList = filesRepository.getMainFiles(path = path)
+        val listWithIcons = setIcons(startList)
+        val sortedList = sort(listWithIcons,typeSorted)
+        val result = sortedList
+        return result
+    }
+
+    private fun sort(array: List<FileModel>, typeSort: Int): List<FileModel>{
+        var resultArray = listOf<FileModel>()
+        when(typeSort){
+            1 -> resultArray = array.sortedBy { it.name }
+            2 -> resultArray = array.sortedBy { it.size }
+            3 -> resultArray = array.sortedBy { it.changeDate }
+            4 -> resultArray = array.sortedBy { it.extension }
+        }
+        return resultArray
+    }
+
+    private fun setIcons(array: List<FileModel>): List<FileModel>{
+        for(i in array){
             when {
                 i.name.endsWith(".txt") -> {
                     i.type = "txt"
@@ -20,11 +38,11 @@ class GetFilesUseCase @Inject constructor(private val filesRepository: FilesRepo
                     i.type = "pdf"
                     i.image = R.drawable.pdf
                 }
-                i.name.endsWith(".png") -> {
+                i.name.endsWith(".png") or i.name.endsWith(".PNG") -> {
                     i.type = "png"
                     i.image = R.drawable.png
                 }
-                i.name.endsWith(".jpg") or i.name.endsWith(".jpeg") -> {
+                i.name.endsWith(".jpg") or i.name.endsWith(".jpeg") or i.name.endsWith(".JPG") -> {
                     i.type = "jpg"
                     i.image = R.drawable.jpeg
                 }
@@ -51,7 +69,7 @@ class GetFilesUseCase @Inject constructor(private val filesRepository: FilesRepo
 
             }
         }
-        return result
+        return array
     }
 
 }
