@@ -52,10 +52,13 @@ class MainFragment: Fragment(R.layout.fragment_main) {
             override fun onItemClick(position: Int) {
                 Log.d("MyLog", "Нажали на ${adapter.filesList[position].name}")
                 Log.d("MyLog", "Путь к файлу ${adapter.filesList[position].path}")
-                bundle = Bundle()
-                bundle.putString("path", adapter.filesList[position].path)
-                Log.d("MyLog","Передали ${adapter.filesList[position].path}")
-                findNavController().navigate(R.id.action_mainFragment_to_secondFragment, bundle)
+                if(adapter.filesList[position].type == "directory"){
+                    bundle = Bundle()
+                    bundle.putString("path", adapter.filesList[position].path)
+                    findNavController().navigate(R.id.action_mainFragment_to_secondFragment, bundle)
+                } else{
+                startActivity(mainViewModel.openFile(path = adapter.filesList[position].path, context = requireContext(), type = adapter.filesList[position].type))
+            }
             }
         })
 

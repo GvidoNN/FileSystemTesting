@@ -32,6 +32,14 @@ class GetFilesUseCase @Inject constructor(private val filesRepository: FilesRepo
                     i.type = "doc"
                     i.image = R.drawable.doc
                 }
+                i.name.endsWith(".mov") or  i.name.endsWith(".mp4") -> {
+                    i.type = "mp4"
+                    i.image = R.drawable.mp4
+                }
+                i.name.endsWith(".mp3")-> {
+                    i.type = "mp3"
+                    i.image = R.drawable.mp3
+                }
                 i.type == "directory" -> {
                     i.type = "directory"
                     i.image = R.drawable.directory

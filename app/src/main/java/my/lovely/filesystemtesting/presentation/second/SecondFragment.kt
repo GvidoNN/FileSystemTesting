@@ -62,13 +62,7 @@ class SecondFragment: Fragment(R.layout.fragment_second) {
                     Log.d("MyLog","Передали ${adapter.filesList[position].path}")
                     findNavController().navigate(R.id.action_secondFragment_to_mainFragment, bundle)
                 } else{
-                    val file = File(adapter.filesList[position].path)
-                    val uri = FileProvider.getUriForFile(requireContext(), "my.lovely.filesystemtesting.fileprovider", file)
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension)
-                    intent.setDataAndType(uri, mimeType)
-                    intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    startActivity(intent)
+                    startActivity(secondViewModel.openFile(path = adapter.filesList[position].path, context = requireContext(), type = adapter.filesList[position].type))
                 }
 
             }
