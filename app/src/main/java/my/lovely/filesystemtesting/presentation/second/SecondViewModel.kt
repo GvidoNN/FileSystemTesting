@@ -2,6 +2,7 @@ package my.lovely.filesystemtesting.presentation.second
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,12 +13,14 @@ import kotlinx.coroutines.launch
 import my.lovely.filesystemtesting.domain.model.FileModel
 import my.lovely.filesystemtesting.domain.usecase.GetFilesUseCase
 import my.lovely.filesystemtesting.domain.usecase.OpenFileUseCase
+import my.lovely.filesystemtesting.domain.usecase.ShareFileUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class SecondViewModel @Inject constructor(
     private val getFilesUseCase: GetFilesUseCase,
-    private val openFileUseCase: OpenFileUseCase
+    private val openFileUseCase: OpenFileUseCase,
+    private val shareFileUseCase: ShareFileUseCase
 ) : ViewModel() {
 
     private var filesSecondLiveData = MutableLiveData<List<FileModel>>()
@@ -33,7 +36,11 @@ class SecondViewModel @Inject constructor(
     fun openFile(path: String, context: Context, type: String): Intent {
         var intent = openFileUseCase.openFile(path = path, context = context, type = type)
         return intent
+    }
 
+    fun shareFile(path: String, context: Context): Intent {
+        var shareIntent = shareFileUseCase.shareFile(path = path, context = context)
+        return shareIntent
     }
 
 }

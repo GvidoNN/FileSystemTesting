@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -15,6 +16,7 @@ class FilesAdapter() : RecyclerView.Adapter<FilesAdapter.FilesViewHolder>() {
 
     private lateinit var context: Context
     private lateinit var clickListener: OnItemClickListener
+    private lateinit var shareListener: OnItemClickListener
 
     var filesList = mutableListOf<FileModel>()
 
@@ -23,15 +25,19 @@ class FilesAdapter() : RecyclerView.Adapter<FilesAdapter.FilesViewHolder>() {
         notifyDataSetChanged()
     }
 //    , clickListener: OnItemClickListener
-    class FilesViewHolder(itemView: View, clickListener: OnItemClickListener) : RecyclerView.ViewHolder(itemView) {
+    class FilesViewHolder(itemView: View, clickListener: OnItemClickListener, shareListener: OnItemClickListener) : RecyclerView.ViewHolder(itemView) {
         val tvFileName: TextView = itemView.findViewById(R.id.tvFileName)
         val tvFileSize: TextView = itemView.findViewById(R.id.tvFileSize)
         val imFile: ImageView = itemView.findViewById(R.id.imFile)
         val tvFileDate: TextView = itemView.findViewById(R.id.tvFileChangeDate)
+        val btFileShare: ImageButton = itemView.findViewById(R.id.btShare)
 
         init {
             itemView.setOnClickListener{
                 clickListener.onItemClick(adapterPosition)
+            }
+            btFileShare.setOnClickListener{
+                shareListener.onItemClick(adapterPosition)
             }
         }
     }
@@ -40,7 +46,7 @@ class FilesAdapter() : RecyclerView.Adapter<FilesAdapter.FilesViewHolder>() {
         context = parent.context
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.file_item, parent, false)
-        return FilesViewHolder(view, clickListener)
+        return FilesViewHolder(view, clickListener, shareListener)
 //        , clickListener
 
     }
@@ -57,6 +63,7 @@ class FilesAdapter() : RecyclerView.Adapter<FilesAdapter.FilesViewHolder>() {
 
         if(fileData.type == "directory"){
             holder.tvFileSize.isVisible = false
+            holder.btFileShare.isVisible = false
         }else {
             holder.tvFileSize.text = "${fileData.size} bytes"
         }
@@ -72,10 +79,10 @@ class FilesAdapter() : RecyclerView.Adapter<FilesAdapter.FilesViewHolder>() {
     fun setOnDirectoryClickListener(listener: OnItemClickListener){
         clickListener = listener
     }
-//
-//    private fun editSubjectText(text: String): String{
-//        val newtext = text.replace("{{{","| ").replace("}}}"," |")
-//        return newtext
-//    }
+
+    fun setOnShareFileListener(listener: OnItemClickListener){
+        shareListener = listener
+    }
+
 
 }

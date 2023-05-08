@@ -24,19 +24,21 @@ import my.lovely.filesystemtesting.databinding.FragmentMainBinding
 
 
 @AndroidEntryPoint
-class MainFragment: Fragment(R.layout.fragment_main) {
+class MainFragment : Fragment(R.layout.fragment_main) {
 
     lateinit var binding: FragmentMainBinding
     private lateinit var adapter: FilesAdapter
     private val mainViewModel: MainViewModel by viewModels()
     private lateinit var bundle: Bundle
-    private var count = 0
+    private var count = 1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        adapter = FilesAdapter()
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,23 +50,47 @@ class MainFragment: Fragment(R.layout.fragment_main) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("MyLog","В первом фрагменте")
+
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-        adapter = FilesAdapter()
+
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
         val path = arguments?.getString("path") ?: "/storage/emulated/0/"
         checkPermissionsAndShow(path = path)
 
-        adapter.setOnDirectoryClickListener(object: FilesAdapter.OnItemClickListener {
+        mainViewModel.files.observe(viewLifecycleOwner) {
+            adapter.setFileList(it)
+        }
+
+        adapter.setOnDirectoryClickListener(object : FilesAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                if(adapter.filesList[position].type == "directory"){
+                if (adapter.filesList[position].type == "directory") {
                     bundle = Bundle()
                     bundle.putString("path", adapter.filesList[position].path)
                     findNavController().navigate(R.id.action_mainFragment_to_secondFragment, bundle)
-                } else{
-                startActivity(mainViewModel.openFile(path = adapter.filesList[position].path, context = requireContext(), type = adapter.filesList[position].type))
+                } else {
+                    startActivity(
+                        mainViewModel.openFile(
+                            path = adapter.filesList[position].path,
+                            context = requireContext(),
+                            type = adapter.filesList[position].type
+                        )
+                    )
+                }
             }
+        })
+
+        adapter.setOnShareFileListener(object : FilesAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                startActivity(
+                    Intent.createChooser(
+                        mainViewModel.shareFile(
+                            path = adapter.filesList[position].path,
+                            context = requireContext()
+                        ), "Share via"
+                    )
+                )
             }
         })
     }
@@ -78,10 +104,9 @@ class MainFragment: Fragment(R.layout.fragment_main) {
         val path = arguments?.getString("path") ?: "/storage/emulated/0/"
         return when (item.itemId) {
             R.id.action_sort -> {
-                if(count == 4){
+                if (count == 5) {
                     count = 0
                 }
-                Toast.makeText(requireContext(),"Sort!",Toast.LENGTH_SHORT).show()
                 count += 1
                 mainViewModel.getMainFiles(path = path, sorted = count)
                 true
@@ -90,29 +115,29 @@ class MainFragment: Fragment(R.layout.fragment_main) {
         }
     }
 
-    private fun checkPermissionsAndShow(path: String){
+    private fun checkPermissionsAndShow(path: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (Environment.isExternalStorageManager()) {
-                mainViewModel.getMainFiles(path = path, sorted = 1)
-                mainViewModel.files.observe(viewLifecycleOwner){
-                    adapter.setFileList(it)
-                }
+                mainViewModel.getMainFiles(path = path, sorted = count)
             } else {
                 val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
                 binding.textView.isVisible = true
                 startActivity(intent)
             }
         } else {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(requireActivity(),
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1
+                )
             }
             binding.textView.isVisible = false
-            mainViewModel.getMainFiles(path = path, sorted = 1)
-            mainViewModel.files.observe(viewLifecycleOwner){
-                adapter.setFileList(it)
-            }
+            mainViewModel.getMainFiles(path = path, sorted = count)
         }
     }
 
