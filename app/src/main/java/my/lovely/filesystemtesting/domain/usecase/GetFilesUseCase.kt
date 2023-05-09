@@ -1,6 +1,5 @@
 package my.lovely.filesystemtesting.domain.usecase
 
-import android.util.Log
 import my.lovely.filesystemtesting.R
 import my.lovely.filesystemtesting.domain.model.FileModel
 import my.lovely.filesystemtesting.domain.repository.FilesRepository
@@ -14,6 +13,14 @@ class GetFilesUseCase @Inject constructor(private val filesRepository: FilesRepo
         val sortedList = sort(listWithIcons, typeSorted)
         val result = sortedList
         return result
+    }
+
+    suspend fun getAllFiles(): List<FileModel>{
+        var startList = filesRepository.getAllFiles()
+        val listWithIcons = setIcons(startList)
+        val result = listWithIcons
+        return result
+
     }
 
     private fun sort(array: List<FileModel>, typeSort: Int): List<FileModel> {

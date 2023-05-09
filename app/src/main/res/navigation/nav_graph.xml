@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_mainFragment_to_secondFragment"
             app:destination="@id/secondFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_changeFragment"
+            app:destination="@id/changeFragment" />
     </fragment>
     <fragment
         android:id="@+id/secondFragment"
@@ -18,6 +21,20 @@
         android:label="SecondFragment" >
         <action
             android:id="@+id/action_secondFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_secondFragment_to_changeFragment"
+            app:destination="@id/changeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changeFragment"
+        android:name="my.lovely.filesystemtesting.presentation.change.ChangeFragment"
+        android:label="ChangeFragment" >
+        <action
+            android:id="@+id/action_changeFragment_to_secondFragment"
+            app:destination="@id/secondFragment" />
+        <action
+            android:id="@+id/action_changeFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </fragment>
 </navigation>

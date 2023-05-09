@@ -7,4 +7,5 @@ data class FileModel(
     val size: Long,
     val path: String,
     val extension: String,
-    var type: String)
+    var type: String,
+    var hash: String)

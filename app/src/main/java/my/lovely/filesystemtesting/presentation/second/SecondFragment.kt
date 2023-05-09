@@ -111,6 +111,10 @@ class SecondFragment : Fragment(R.layout.fragment_second) {
                 secondViewModel.getSecondFiles(path = path, typeSorted = count)
                 true
             }
+            R.id.action_change -> {
+                findNavController().navigate(R.id.action_secondFragment_to_changeFragment)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

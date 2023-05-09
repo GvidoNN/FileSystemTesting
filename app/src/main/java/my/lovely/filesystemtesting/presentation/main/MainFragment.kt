@@ -59,6 +59,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         val path = arguments?.getString("path") ?: "/storage/emulated/0/"
         checkPermissionsAndShow(path = path)
 
+        mainViewModel.saveAllFiles()
+
         mainViewModel.files.observe(viewLifecycleOwner) {
             adapter.setFileList(it)
         }
@@ -111,6 +113,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 mainViewModel.getMainFiles(path = path, sorted = count)
                 true
             }
+            R.id.action_change -> {
+                findNavController().navigate(R.id.action_mainFragment_to_changeFragment)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -140,6 +146,4 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             mainViewModel.getMainFiles(path = path, sorted = count)
         }
     }
-
-
 }

@@ -2,6 +2,7 @@ package my.lovely.filesystemtesting
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import dagger.hilt.android.AndroidEntryPoint
 import my.lovely.filesystemtesting.databinding.ActivityMainBinding
 
@@ -15,6 +16,5 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
     }
-
 
 }
