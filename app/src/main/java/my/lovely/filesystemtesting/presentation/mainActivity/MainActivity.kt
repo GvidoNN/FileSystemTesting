@@ -1,5 +1,6 @@
 package my.lovely.filesystemtesting.presentation.mainActivity
 
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState != null) {
             isDatabaseCreated = savedInstanceState.getBoolean("isDatabaseCreated")
         }
+
         if (!isDatabaseCreated) {
             mainActivityViewModel.saveAllFiles()
             isDatabaseCreated = true
@@ -31,6 +33,5 @@ class MainActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         outState.putBoolean("isDatabaseCreated", isDatabaseCreated)
     }
-
 
 }

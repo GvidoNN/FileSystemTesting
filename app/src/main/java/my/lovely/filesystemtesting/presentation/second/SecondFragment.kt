@@ -1,18 +1,9 @@
 package my.lovely.filesystemtesting.presentation.second
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.Settings
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -67,7 +58,6 @@ class SecondFragment : Fragment(R.layout.fragment_second) {
 
         secondViewModel.filesSecond.observe(viewLifecycleOwner) {
             binding.tvSecondEmpty.visibility = if(it.size == 0) View.VISIBLE else View.GONE
-            Log.d("MyLog",it.size.toString())
             adapter.setFileList(it)
         }
 

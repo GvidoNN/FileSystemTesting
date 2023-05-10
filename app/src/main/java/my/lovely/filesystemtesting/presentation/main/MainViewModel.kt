@@ -2,6 +2,7 @@ package my.lovely.filesystemtesting.presentation.main
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import my.lovely.filesystemtesting.domain.model.FileHash
 import my.lovely.filesystemtesting.domain.model.FileModel
 import my.lovely.filesystemtesting.domain.usecase.*
 import javax.inject.Inject
@@ -17,7 +19,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val getFilesUseCase: GetFilesUseCase,
     private val openFileUseCase: OpenFileUseCase,
-    private val shareFileUseCase: ShareFileUseCase
+    private val shareFileUseCase: ShareFileUseCase,
+    private val getDaoDbUseCase: GetDaoDbUseCase
 ) : ViewModel() {
 
     private var filesLiveData = MutableLiveData<List<FileModel>>()
@@ -25,7 +28,6 @@ class MainViewModel @Inject constructor(
 
     val files: LiveData<List<FileModel>>
         get() = filesLiveData
-
 
 
     fun getMainFiles(path: String, sorted: Int) = viewModelScope.launch(Dispatchers.IO) {
@@ -41,7 +43,5 @@ class MainViewModel @Inject constructor(
         var shareIntent = shareFileUseCase.shareFile(path = path, context = context)
         return shareIntent
     }
-
-
 
 }

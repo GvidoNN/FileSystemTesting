@@ -24,7 +24,7 @@ class FilesAdapter() : RecyclerView.Adapter<FilesAdapter.FilesViewHolder>() {
         this.filesList = file.toMutableList()
         notifyDataSetChanged()
     }
-//    , clickListener: OnItemClickListener
+
     class FilesViewHolder(itemView: View, clickListener: OnItemClickListener, shareListener: OnItemClickListener) : RecyclerView.ViewHolder(itemView) {
         val tvFileName: TextView = itemView.findViewById(R.id.tvFileName)
         val tvFileSize: TextView = itemView.findViewById(R.id.tvFileSize)
@@ -47,8 +47,6 @@ class FilesAdapter() : RecyclerView.Adapter<FilesAdapter.FilesViewHolder>() {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.file_item, parent, false)
         return FilesViewHolder(view, clickListener, shareListener)
-//        , clickListener
-
     }
 
     override fun getItemCount(): Int {
@@ -69,7 +67,8 @@ class FilesAdapter() : RecyclerView.Adapter<FilesAdapter.FilesViewHolder>() {
         }
         holder.tvFileDate.text = fileData.changeDate
         holder.imFile.setImageResource(fileData.image
-        )}
+        )
+    }
 
 
     interface OnItemClickListener{
@@ -83,6 +82,5 @@ class FilesAdapter() : RecyclerView.Adapter<FilesAdapter.FilesViewHolder>() {
     fun setOnShareFileListener(listener: OnItemClickListener){
         shareListener = listener
     }
-
 
 }

@@ -9,7 +9,6 @@ import android.os.Environment
 import android.provider.Settings
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -30,7 +29,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private val mainViewModel: MainViewModel by viewModels()
     private lateinit var bundle: Bundle
     private var count = 1
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,16 +60,17 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         val path = arguments?.getString(Const.PATH) ?: Const.NULL_PATH
         checkPermissionsAndShow(path = path)
 
-        (activity as AppCompatActivity).supportActionBar?.title = if(path == Const.NULL_PATH) "Home" else path.substring(19)
+        (activity as AppCompatActivity).supportActionBar?.title =
+            if (path == Const.NULL_PATH) "Home" else path.substring(19)
 
         mainViewModel.files.observe(viewLifecycleOwner) {
-            binding.tvMainEmpty.visibility = if(it.isEmpty()) View.VISIBLE else View.GONE
+            binding.tvMainEmpty.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
             adapter.setFileList(it)
         }
 
         adapter.setOnDirectoryClickListener(object : FilesAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                if (adapter.filesList[position].type ==  Const.DIRECTORY_TYPE) {
+                if (adapter.filesList[position].type == Const.DIRECTORY_TYPE) {
                     bundle = Bundle()
                     bundle.putString(Const.PATH, adapter.filesList[position].path)
                     findNavController().navigate(R.id.action_mainFragment_to_secondFragment, bundle)
@@ -135,19 +134,23 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 mainViewModel.getMainFiles(path = path, sorted = count)
             }
         } else {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
-                != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1
-                )
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+            } else {
+                binding.tvPermission.isVisible = false
+                mainViewModel.getMainFiles(path = path, sorted = count)
             }
-            binding.tvPermission.isVisible = false
+
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        val path = arguments?.getString(Const.PATH) ?: Const.NULL_PATH
+        if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             mainViewModel.getMainFiles(path = path, sorted = count)
+        } else {
+            binding.tvPermission.isVisible = true
         }
     }
 }

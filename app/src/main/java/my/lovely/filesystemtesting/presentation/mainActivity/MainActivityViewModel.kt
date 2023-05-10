@@ -34,5 +34,6 @@ class MainActivityViewModel @Inject constructor(
                 )
             )
         }
+        Log.d("MyLog","DataBase created")
     }
 }

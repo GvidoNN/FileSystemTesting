@@ -4,5 +4,6 @@
     Если вы это уже сделали, значит перезагрузите приложение и вы узрите этот шедевр</string>
     <string name="non_files">Пустая папка :(</string>
     <string name="change_title">Изменённые файлы</string>
+    <string name="non_files_change">Пустая папка :( \n Можно перезапустить приложение и попробовать снова</string>
 
 </resources>
