@@ -1,5 +1,6 @@
 package my.lovely.filesystemtesting.data.repository
 
+import my.lovely.filesystemtesting.Const
 import my.lovely.filesystemtesting.data.database.HashFileDao
 import my.lovely.filesystemtesting.R
 import my.lovely.filesystemtesting.domain.model.FileModel
@@ -23,7 +24,7 @@ class FilesRepositoryImpl @Inject constructor(private val hashFileDao: HashFileD
         if (files != null) {
             for (file in files) {
                 if (file.isDirectory) {
-                    filesList.add(getInfoFiles(file = file, type = "directory"))
+                    filesList.add(getInfoFiles(file = file, type = Const.DIRECTORY_TYPE))
                 } else if (file.isFile) {
                     filesList.add(getInfoFiles(file = file, type = "ligma"))
                 }
@@ -33,7 +34,7 @@ class FilesRepositoryImpl @Inject constructor(private val hashFileDao: HashFileD
     }
 
     override suspend fun getAllFiles(): List<FileModel>{
-        val root = File("/storage/emulated/0/")
+        val root = File(Const.NULL_PATH)
         val files = root.listFiles()
         if (files != null) {
             for (file in files) {
@@ -59,7 +60,6 @@ class FilesRepositoryImpl @Inject constructor(private val hashFileDao: HashFileD
                 }
             }
         }
-
     }
 
     private fun getInfoFiles(file: File, type: String): FileModel{
@@ -70,7 +70,6 @@ class FilesRepositoryImpl @Inject constructor(private val hashFileDao: HashFileD
         val extension = file.extension
         val type = type
         val hash = file.hashCode().toString()
-            //val content = if(type != "directory") file.readText().hashCode().toString() else "123"
         val file = FileModel(name = name,
             changeDate = date,
             size = size,

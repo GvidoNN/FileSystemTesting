@@ -2,7 +2,6 @@ package my.lovely.filesystemtesting.presentation.main
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,18 +9,15 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import my.lovely.filesystemtesting.domain.model.FileHash
 import my.lovely.filesystemtesting.domain.model.FileModel
 import my.lovely.filesystemtesting.domain.usecase.*
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val getFilesUseCase: GetFilesUseCase,
     private val openFileUseCase: OpenFileUseCase,
-    private val shareFileUseCase: ShareFileUseCase,
-    private val getAllFilesUseCase: GetAllFilesUseCase
+    private val shareFileUseCase: ShareFileUseCase
 ) : ViewModel() {
 
     private var filesLiveData = MutableLiveData<List<FileModel>>()

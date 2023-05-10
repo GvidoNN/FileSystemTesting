@@ -2,7 +2,6 @@ package my.lovely.filesystemtesting.presentation.second
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

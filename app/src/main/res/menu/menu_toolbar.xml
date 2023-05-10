@@ -13,5 +13,4 @@
         android:icon="@drawable/ic_change"
         android:iconTint="@color/white"
         app:showAsAction="ifRoom" />
-
 </menu>

@@ -4,10 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import my.lovely.filesystemtesting.R
 import my.lovely.filesystemtesting.domain.model.FileHash
 import my.lovely.filesystemtesting.domain.model.FileModel
@@ -37,7 +34,6 @@ class ChangeViewModel @Inject constructor(
             val size = file.length()
 
             if (fileDB.fileHash != hash || fileDB.size != size) {
-                Log.d("MyLog","Есть несостыковка!!! ${file.name}")
                 changedFiles.add(FileModel(name = file.name,
                     changeDate = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(file.lastModified())).toString(),
                     size = file.length(),

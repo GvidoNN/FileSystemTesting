@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import my.lovely.filesystemtesting.Const
 import my.lovely.filesystemtesting.R
 import my.lovely.filesystemtesting.domain.model.FileModel
 
@@ -47,7 +48,7 @@ class ChangeFilesAdapter() : RecyclerView.Adapter<ChangeFilesAdapter.FilesViewHo
             holder.tvFileName.text = fileData.name.substring(0,19) + "..."
         } else holder.tvFileName.text = fileData.name
 
-        if(fileData.type == "directory"){
+        if(fileData.type == Const.DIRECTORY_TYPE){
             holder.tvFileSize.isVisible = false
         }else {
             holder.tvFileSize.text = "${fileData.size} bytes"

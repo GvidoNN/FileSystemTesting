@@ -37,6 +37,10 @@ class ChangeFragment: Fragment(R.layout.fragment_change) {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
 
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -46,18 +50,8 @@ class ChangeFragment: Fragment(R.layout.fragment_change) {
         }
 
         changeViewModel.files.observe(viewLifecycleOwner){
+            binding.tvChangeEmpty.visibility = if(it.isEmpty()) View.VISIBLE else View.GONE
             adapter.setFileList(it)
-        }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_toolbar, menu)
-        return super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            else -> super.onOptionsItemSelected(item)
         }
     }
 

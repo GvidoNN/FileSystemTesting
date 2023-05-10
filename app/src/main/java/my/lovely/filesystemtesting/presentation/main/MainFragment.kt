@@ -7,9 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -19,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import my.lovely.filesystemtesting.Const
 import my.lovely.filesystemtesting.R
 import my.lovely.filesystemtesting.databinding.FragmentMainBinding
 
@@ -52,22 +51,29 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener {
+            activity?.onBackPressed()
+        }
 
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        val path = arguments?.getString("path") ?: "/storage/emulated/0/"
+        val path = arguments?.getString(Const.PATH) ?: Const.NULL_PATH
         checkPermissionsAndShow(path = path)
 
+        (activity as AppCompatActivity).supportActionBar?.title = if(path == Const.NULL_PATH) "Home" else path.substring(19)
+
         mainViewModel.files.observe(viewLifecycleOwner) {
+            binding.tvMainEmpty.visibility = if(it.isEmpty()) View.VISIBLE else View.GONE
             adapter.setFileList(it)
         }
 
         adapter.setOnDirectoryClickListener(object : FilesAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                if (adapter.filesList[position].type == "directory") {
+                if (adapter.filesList[position].type ==  Const.DIRECTORY_TYPE) {
                     bundle = Bundle()
-                    bundle.putString("path", adapter.filesList[position].path)
+                    bundle.putString(Const.PATH, adapter.filesList[position].path)
                     findNavController().navigate(R.id.action_mainFragment_to_secondFragment, bundle)
                 } else {
                     startActivity(
@@ -101,7 +107,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val path = arguments?.getString("path") ?: "/storage/emulated/0/"
+        val path = arguments?.getString(Const.PATH) ?: Const.NULL_PATH
         return when (item.itemId) {
             R.id.action_sort -> {
                 if (count == 5) {
@@ -125,8 +131,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 mainViewModel.getMainFiles(path = path, sorted = count)
             } else {
                 val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
-                binding.textView.isVisible = true
                 startActivity(intent)
+                mainViewModel.getMainFiles(path = path, sorted = count)
             }
         } else {
             if (ContextCompat.checkSelfPermission(
@@ -140,7 +146,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1
                 )
             }
-            binding.textView.isVisible = false
+            binding.tvPermission.isVisible = false
             mainViewModel.getMainFiles(path = path, sorted = count)
         }
     }

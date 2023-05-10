@@ -1,5 +1,6 @@
 package my.lovely.filesystemtesting.domain.usecase
 
+import my.lovely.filesystemtesting.Const
 import my.lovely.filesystemtesting.R
 import my.lovely.filesystemtesting.domain.model.FileModel
 import my.lovely.filesystemtesting.domain.repository.FilesRepository
@@ -66,8 +67,8 @@ class GetFilesUseCase @Inject constructor(private val filesRepository: FilesRepo
                     i.type = "mp3"
                     i.image = R.drawable.mp3
                 }
-                i.type == "directory" -> {
-                    i.type = "directory"
+                i.type ==  Const.DIRECTORY_TYPE -> {
+                    i.type =  Const.DIRECTORY_TYPE
                     i.image = R.drawable.directory
                 }
                 else -> {
