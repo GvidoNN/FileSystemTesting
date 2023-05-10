@@ -59,8 +59,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         val path = arguments?.getString("path") ?: "/storage/emulated/0/"
         checkPermissionsAndShow(path = path)
 
-        mainViewModel.saveAllFiles()
-
         mainViewModel.files.observe(viewLifecycleOwner) {
             adapter.setFileList(it)
         }

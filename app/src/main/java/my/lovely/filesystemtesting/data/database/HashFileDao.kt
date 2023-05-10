@@ -1,17 +1,13 @@
-package my.lovely.booksearcher2.data.database
+package my.lovely.filesystemtesting.data.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import my.lovely.filesystemtesting.domain.model.FileHash
 
 @Dao
 interface HashFileDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertHashFile(file: FileHash)
 
     @Update

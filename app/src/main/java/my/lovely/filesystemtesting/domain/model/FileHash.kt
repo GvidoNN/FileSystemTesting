@@ -6,9 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "hash_file_data_table")
 data class FileHash(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    var id: Int,
+    @PrimaryKey()
     @ColumnInfo(name = "path")
     var filePath: String,
     @ColumnInfo(name = "hash")
@@ -25,4 +23,6 @@ data class FileHash(
     val extension: String,
     @ColumnInfo(name = "type")
     var type: String
+//    @ColumnInfo(name = "content")
+//    var content: String
 )

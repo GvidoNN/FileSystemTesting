@@ -21,18 +21,16 @@ class MainViewModel @Inject constructor(
     private val getFilesUseCase: GetFilesUseCase,
     private val openFileUseCase: OpenFileUseCase,
     private val shareFileUseCase: ShareFileUseCase,
-    private val getDaoDbUseCase: GetDaoDbUseCase,
     private val getAllFilesUseCase: GetAllFilesUseCase
 ) : ViewModel() {
 
     private var filesLiveData = MutableLiveData<List<FileModel>>()
-    private var allFilesLiveData = MutableLiveData<List<FileModel>>()
+
 
     val files: LiveData<List<FileModel>>
         get() = filesLiveData
 
-    val allFiles: LiveData<List<FileModel>>
-        get() = allFilesLiveData
+
 
     fun getMainFiles(path: String, sorted: Int) = viewModelScope.launch(Dispatchers.IO) {
         var result = getFilesUseCase.getMainFiles(path = path, typeSorted = sorted)
@@ -48,25 +46,6 @@ class MainViewModel @Inject constructor(
         return shareIntent
     }
 
-    fun saveAllFiles() = viewModelScope.launch(Dispatchers.IO) {
-        var result = getFilesUseCase.getAllFiles()
-        for(i in result){
-            getDaoDbUseCase.getDaoDb().insertHashFile(
-                FileHash(
-                    id = 0,
-                    filePath = i.path,
-                    fileHash = i.hash,
-                    name = i.name,
-                    image = i.image,
-                    changeDate = i.changeDate,
-                    size = i.size,
-                    extension = i.extension,
-                    type = i.type
-                )
-            )
-        }
-        Log.d("MyLog","Database added")
-        allFilesLiveData.postValue(result)
-    }
+
 
 }

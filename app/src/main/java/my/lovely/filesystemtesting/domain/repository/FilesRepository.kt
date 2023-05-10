@@ -1,6 +1,6 @@
 package my.lovely.filesystemtesting.domain.repository
 
-import my.lovely.booksearcher2.data.database.HashFileDao
+import my.lovely.filesystemtesting.data.database.HashFileDao
 import my.lovely.filesystemtesting.domain.model.FileModel
 
 interface FilesRepository {

@@ -1,6 +1,6 @@
 package my.lovely.filesystemtesting.data.repository
 
-import my.lovely.booksearcher2.data.database.HashFileDao
+import my.lovely.filesystemtesting.data.database.HashFileDao
 import my.lovely.filesystemtesting.R
 import my.lovely.filesystemtesting.domain.model.FileModel
 import my.lovely.filesystemtesting.domain.repository.FilesRepository
@@ -13,7 +13,7 @@ import kotlin.collections.ArrayList
 class FilesRepositoryImpl @Inject constructor(private val hashFileDao: HashFileDao) : FilesRepository {
 
     private val fileList = ArrayList<FileModel>()
-    override fun getDaoDb(): HashFileDao{
+    override fun getDaoDb(): HashFileDao {
         return hashFileDao
     }
     override suspend fun getMainFiles(path: String): List<FileModel> {
@@ -70,6 +70,7 @@ class FilesRepositoryImpl @Inject constructor(private val hashFileDao: HashFileD
         val extension = file.extension
         val type = type
         val hash = file.hashCode().toString()
+            //val content = if(type != "directory") file.readText().hashCode().toString() else "123"
         val file = FileModel(name = name,
             changeDate = date,
             size = size,

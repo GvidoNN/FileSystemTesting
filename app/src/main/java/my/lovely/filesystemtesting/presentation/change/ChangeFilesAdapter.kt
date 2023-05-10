@@ -4,22 +4,20 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import my.lovely.filesystemtesting.R
-import my.lovely.filesystemtesting.domain.model.FileHash
 import my.lovely.filesystemtesting.domain.model.FileModel
 
 class ChangeFilesAdapter() : RecyclerView.Adapter<ChangeFilesAdapter.FilesViewHolder>() {
 
     private lateinit var context: Context
 
-    var changeFilesList = mutableListOf<FileHash>()
+    var changeFilesList = mutableListOf<FileModel>()
 
-    fun setFileList(file: List<FileHash>) {
+    fun setFileList(file: List<FileModel>) {
         this.changeFilesList = file.toMutableList()
         notifyDataSetChanged()
     }
@@ -34,7 +32,7 @@ class ChangeFilesAdapter() : RecyclerView.Adapter<ChangeFilesAdapter.FilesViewHo
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FilesViewHolder {
         context = parent.context
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.file_item, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.file_change_item, parent, false)
         return FilesViewHolder(view)
 
     }

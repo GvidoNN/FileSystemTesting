@@ -7,7 +7,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import my.lovely.booksearcher2.data.database.HashFileDataBase
 import javax.inject.Singleton
 
 @Module

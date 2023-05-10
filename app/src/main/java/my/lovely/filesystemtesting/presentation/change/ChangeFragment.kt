@@ -11,7 +11,6 @@ import my.lovely.filesystemtesting.R
 import my.lovely.filesystemtesting.databinding.FragmentChangeBinding
 
 
-
 @AndroidEntryPoint
 class ChangeFragment: Fragment(R.layout.fragment_change) {
 
@@ -42,10 +41,13 @@ class ChangeFragment: Fragment(R.layout.fragment_change) {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        changeViewModel.allFiles.observe(viewLifecycleOwner) {
-            adapter.setFileList(it)
+        changeViewModel.allFiles.observe(viewLifecycleOwner){
+            changeViewModel.changedFiles(it)
         }
 
+        changeViewModel.files.observe(viewLifecycleOwner){
+            adapter.setFileList(it)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

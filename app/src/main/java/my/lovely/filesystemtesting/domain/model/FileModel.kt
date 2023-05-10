@@ -9,3 +9,4 @@ data class FileModel(
     val extension: String,
     var type: String,
     var hash: String)
+//    var content: String)
