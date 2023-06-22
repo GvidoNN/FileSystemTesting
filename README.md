@@ -1,5 +1,4 @@
 # Файловый менеджер
-# Выполнены все требования по функционалу, в том числе и дополнительные</h2>
 ![1](https://github.com/GvidoNN/FileSystemTesting/blob/master/main.jpg) | ![2](https://github.com/GvidoNN/FileSystemTesting/blob/master/downloads.jpg)
 :-----------------------------------:|:------------------------------------:
 ![3](https://github.com/GvidoNN/FileSystemTesting/blob/master/changes.jpg) | ![4](https://github.com/GvidoNN/FileSystemTesting/blob/master/sorted.jpg)
